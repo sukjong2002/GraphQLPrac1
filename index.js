@@ -1,4 +1,4 @@
-const { PrismaClient } = require('@prisma/client')
+const {PrismaClient} = require('@prisma/client')
 const {ApolloServer} = require("apollo-server");
 const fs = require("fs");
 const path = require("path");
@@ -7,25 +7,40 @@ const prisma = new PrismaClient()
 
 const resolvers = {
     Query: {
-        info: () => 'GQL API',
-        feed: async (parent, args, context) => {
-            return context.prisma.link.findMany()
-        },
+        // id: (args) => args.id(),
+        // email: async (parent, args, context) => {
+        //     return await context.prisma.mod.findUnique({
+        //         where: {id:args.id()},
+        //         select: {
+        //             email: true,
+        //         },
+        //     });
+        // },
+        load: async (parent, args, context) => {
+            const id = args.id;
+            const email = await context.prisma.mod.findUnique({
+                where: {id: args.id},
+                select: {
+                    email: true,
+                },
+            }).email;
+            return {
+                id,
+                email
+            };
+        }
     },
     Mutation: {
-        post: (parent, args, context, info) => {
-            const newLink = context.prisma.link.create({
-                data: {
-                    url: args.url,
-                    description: args.description,
-                },
-            })
-            return newLink
+        signup: async (parent, args, context, info) => {
+            const user = await context.prisma.mod.create({
+                data: {...args}
+            });
+            return "SUCCESS"
         },
     },
 }
 
-const server = new  ApolloServer({
+const server = new ApolloServer({
     typeDefs: fs.readFileSync(
         path.join(__dirname, 'schema.graphql'),
         'utf-8'
@@ -35,4 +50,6 @@ const server = new  ApolloServer({
         prisma
     }
 })
+
+server.listen().then(({url}) => console.log(`Server is running on ${url}`));
 

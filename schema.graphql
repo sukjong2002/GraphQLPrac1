@@ -1,6 +1,19 @@
-type mod {
-    id: ID!
-    name: String!
-    birth: String!
-    email: String!
-    }
+type Mutation {
+    signup(
+        name: String!
+        birth: String!
+        email: String!
+    ): String
+}
+
+type Query {
+    dummy: String!
+    load(
+        id: Int!
+    ):Mod!
+}
+
+type Mod {
+    id: Int!
+    email: String
+}
