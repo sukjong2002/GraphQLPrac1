@@ -3,7 +3,7 @@
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://seokjong@localhost:5432/seokjong?schema=public"
+  url      = "postgresql://seokjong:0407@localhost:5432/seokjong"
 }
 
 generator client {

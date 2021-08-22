@@ -7,26 +7,24 @@ const prisma = new PrismaClient()
 
 const resolvers = {
     Query: {
-        // id: (args) => args.id(),
-        // email: async (parent, args, context) => {
-        //     return await context.prisma.mod.findUnique({
-        //         where: {id:args.id()},
-        //         select: {
-        //             email: true,
-        //         },
-        //     });
-        // },
         load: async (parent, args, context) => {
             const id = args.id;
-            const email = await context.prisma.mod.findUnique({
+            const infos = await context.prisma.mod.findUnique({
                 where: {id: args.id},
                 select: {
+                    name: true,
+                    birth: true,
                     email: true,
                 },
-            }).email;
+            });
+            const email = infos.email
+            const birth = infos.birth
+            const name = infos.name
             return {
                 id,
-                email
+                email,
+                birth,
+                name,
             };
         }
     },

@@ -15,5 +15,13 @@ type Query {
 
 type Mod {
     id: Int!
-    email: String
+    name: String!
+    birth: String!
+    email: String!
 }
+
+#type Infos {
+#    name: String!
+#    birth: String!
+#    email: String!
+#}
